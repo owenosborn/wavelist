@@ -119,9 +119,9 @@ static int scan_for_wavs(t_wavelist *x, const char *path) {
 
 // pd class //
 
-static void wavelist_scan(t_wavelist *x, t_symbol *s){
+static void wavelist_scan(t_wavelist *x, t_symbol *s) {
     t_atom atom[1];
-    
+
     scan_for_wavs(x, s->s_name);
 
     SETFLOAT(atom, x->filenames.count);
@@ -131,11 +131,11 @@ static void wavelist_scan(t_wavelist *x, t_symbol *s){
     outlet_anything(x->outlet, gensym("next_name"), 1, atom);
 }
 
-static void wavelist_float(t_wavelist *x, t_floatarg f){
+static void wavelist_float(t_wavelist *x, t_floatarg f) {
     t_atom atom[1];
    
     if (x->filenames.count <= 0) {post("no files");return;}
-    int i = (int)f;
+    unsigned int i = (int)f;
     if (i < 0) i = 0;
     if (i >= x->filenames.count) i = x->filenames.count - 1;
 
@@ -145,13 +145,27 @@ static void wavelist_float(t_wavelist *x, t_floatarg f){
     outlet_anything(x->outlet, gensym("filename"), 1, atom);
 }
 
-static void wavelist_add(t_wavelist *x, t_symbol *s){}
+static void wavelist_add(t_wavelist *x, t_symbol *s) {
+    append(&(x->filenames), s->s_name);
 
+    x->filenames.next_numbered_name += 1;
+ 
+    t_atom atom[1];
+
+    SETFLOAT(atom, x->filenames.count);
+    outlet_anything(x->outlet, gensym("total_files"), 1, atom);
+    
+    SETFLOAT(atom, x->filenames.next_numbered_name);
+    outlet_anything(x->outlet, gensym("next_name"), 1, atom);
+}
+
+/*
 static void wavelist_next(t_wavelist *x){}
 
 static void wavelist_previous(t_wavelist *x){}
 
 static void wavelist_clear(t_wavelist *x){}
+*/
 
 static void *wavelist_new(){
     t_wavelist *x = (t_wavelist *)pd_new(wavelist_class);
@@ -180,8 +194,8 @@ void wavelist_setup(void) {
     class_addmethod(wavelist_class, (t_method)wavelist_scan, gensym("scan"), A_SYMBOL, 0);
     class_addmethod(wavelist_class, (t_method)wavelist_float, gensym("float"), A_FLOAT, 0);
     class_addmethod(wavelist_class, (t_method)wavelist_add, gensym("add"), A_SYMBOL, 0);
-    class_addmethod(wavelist_class, (t_method)wavelist_next, gensym("next"), 0);
-    class_addmethod(wavelist_class, (t_method)wavelist_previous, gensym("previous"), 0);
-    class_addmethod(wavelist_class, (t_method)wavelist_clear, gensym("clear"), 0);
+    //class_addmethod(wavelist_class, (t_method)wavelist_next, gensym("next"), 0);
+    //class_addmethod(wavelist_class, (t_method)wavelist_previous, gensym("previous"), 0);
+    //class_addmethod(wavelist_class, (t_method)wavelist_clear, gensym("clear"), 0);
 }
 
