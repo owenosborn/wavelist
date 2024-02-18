@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -43,8 +44,8 @@ static int ends_with_wav(const char *str) {
 
 // for sorting 
 static int compare(const void *a, const void *b) {
-    //return strverscmp(*(const char **)a, *(const char **)b);
-    return strcmp(*(const char **)a, *(const char **)b);
+    return strverscmp(*(const char **)a, *(const char **)b);
+    //return strcmp(*(const char **)a, *(const char **)b);
 }
 
 // clear the filename list
