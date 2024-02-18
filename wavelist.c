@@ -119,6 +119,7 @@ static int scan_for_wavs(t_wavelist *x, const char *path) {
 
 // pd class //
 
+// make list of wav files in the specified folder
 static void wavelist_scan(t_wavelist *x, t_symbol *s) {
     t_atom atom[1];
 
@@ -131,6 +132,7 @@ static void wavelist_scan(t_wavelist *x, t_symbol *s) {
     outlet_anything(x->outlet, gensym("next_name"), 1, atom);
 }
 
+// index the list
 static void wavelist_float(t_wavelist *x, t_floatarg f) {
     t_atom atom[1];
    
@@ -145,6 +147,7 @@ static void wavelist_float(t_wavelist *x, t_floatarg f) {
     outlet_anything(x->outlet, gensym("filename"), 1, atom);
 }
 
+// add file to the index
 static void wavelist_add(t_wavelist *x, t_symbol *s) {
     append(&(x->filenames), s->s_name);
 
